@@ -60,15 +60,15 @@ Once our subscription is active, we can start executing
 ```javascript
 const builderKeypair = Keypair.from(config.NIL_BUILDER_PRIVATE_KEY);
 const builder = await SecretVaultBuilderClient.from({
-    keypair: builderKeypair,
-    urls: {
-        chain: config.NILCHAIN_URL,
-        auth: config.NILAUTH_URL,
-        dbs: config.NILDB_NODES,
-    },
-    blindfold: {
-        operation: "store",
-    },
+  keypair: builderKeypair,
+  urls: {
+    chain: config.NILCHAIN_URL,
+    auth: config.NILAUTH_URL,
+    dbs: config.NILDB_NODES,
+  },
+  blindfold: {
+    operation: "store",
+  },
 });
 
 await builder.refreshRootToken();
@@ -107,21 +107,21 @@ their own documents in the newly created collection:
 
 ```javascript
 await user.createData(delegation, {
-    owner: userDid,
-    acl: {
-        grantee: builder.did.toString(), // Grant access to the builder
-        read: false, // Builder cannot read the data
-        write: false, // Builder cannot modify the data
-        execute: true, // Builder can run queries on the data
+  owner: userDid,
+  acl: {
+    grantee: builder.did.toString(), // Grant access to the builder
+    read: false, // Builder cannot read the data
+    write: false, // Builder cannot modify the data
+    execute: true, // Builder can run queries on the data
+  },
+  collection: collectionId,
+  data: [
+    {
+      private_key: {
+        "%allot": userKeypair.privateKey(),
+      },
     },
-    collection: collectionId,
-    data: [
-        {
-            private_key: {
-                "%allot": userKeypair.privateKey(),
-            },
-        },
-    ],
+  ],
 });
 ```
 
@@ -131,16 +131,16 @@ access to even read it.
 ## Upload Encrypted File
 
 Once we have a private key, we can encrypt the file and upload it to Arweave.
-Arweave is a permanent and decentralized storage layer, and files under 100KB
-are stored for free (if you need to store larger files, you will need some
-tokens first).
+Arweave is a permanent and decentralized storage layer, and if you upload
+through Turbo, as we do in this demo, files under 100KB are stored for free (if
+you need to store larger files, you will need some tokens first).
 
 To encrypt our file, we first need to retrieve our private key:
 
 ```javascript
 const result = await user.readData({
-    collection: collectionId,
-    document: dataId,
+  collection: collectionId,
+  document: dataId,
 });
 ```
 
